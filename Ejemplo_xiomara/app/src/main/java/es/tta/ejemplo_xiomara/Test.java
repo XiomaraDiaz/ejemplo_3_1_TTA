@@ -4,42 +4,62 @@ package es.tta.ejemplo_xiomara;
  * Created by Usuario on 18/12/2015.
  */
 public class Test {
+    static public final short ADVISE_HTML = 0;
+    static public final short ADVISE_VIDEO = 1;
+    static public final short ADVISE_AUDIO = 2;
+
+    private String wording;
+    private Choice[] choices;
+    private String advise;
+    private short adviseType;
+
+    public Test(String Wording,String [] choicesWording,boolean [] choicesCorrect, String Advise, short Type){
+        wording = Wording;
+        advise = Advise;
+        adviseType = Type;
+        if(choicesWording.length == choicesCorrect.length){
+            choices = new Choice[choicesCorrect.length];
+            int i = 0;
+            for(String choice : choicesWording){
+                choices[i] = new Choice(choice,choicesCorrect[i]);
+                i++;
+            }
+        }
+    }
+
     public String getWording(){
-        String question="¿Cuál de las siguientes opciones NO se indica en el fichero de manifiesto de la app?";
-        return question;
+        return wording;
     }
 
-    public Choice[]getChoices(){
-        Choice[]choices=new Choice[5];
-        choices[0]=new Choice ("Versión de aplicación",false);
-        choices[1]=new Choice("Listado de componentes de la aplicación",false);
-        choices[2]=new Choice ("Opciones del menú de ajustes",true);
-        choices[3]=new Choice("Nivel mínimo de la API Android requerida",false);
-        choices[4]=new Choice("Nombre del paquete java de la aplicación",false);
-
+    public Choice[] getChoices(){
         return choices;
-
     }
+
+    public String getAdvice(){
+        return advise;
+    }
+
+    public short getAdviseType(){
+        return adviseType;
+    }
+
 
     public class Choice{
-        private String opcion_enunciado;
-        private boolean correcta;
-        public Choice(String opcion_enunciado, boolean correcta){
-            this.opcion_enunciado=opcion_enunciado;
-            this.correcta=correcta;
 
+        private String wording;
+        private boolean correct;
+
+        public Choice(String Swording, boolean Correct){
+            wording=Swording;
+            correct=Correct;
         }
 
-        public String getOpcionEnunciado(){
-            return opcion_enunciado;
-        }
+        public String getWording(){ return wording;  }
 
-        public boolean isCorrecta(){
-            return correcta;
+        public boolean isCorrect(){
+            return correct;
         }
     }
-
-
 
 
 }

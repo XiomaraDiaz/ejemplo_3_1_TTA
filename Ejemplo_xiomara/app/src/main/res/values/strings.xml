@@ -20,6 +20,10 @@
     <string name="sacarfoto">SACAR FOTO</string>
     <string name="grabaraudio">GRABAR AUDIO</string>
     <string name="grabarvideo">GRABAR VIDEO</string>
+    <string name="no_camara">No hay cámara</string>
+    <string name="no_app">No hay app</string>
+    <string name="no_micro">No hay micro</string>
+    <string name="enviarfich">se envía el fichero</string>
 
 
 </resources>

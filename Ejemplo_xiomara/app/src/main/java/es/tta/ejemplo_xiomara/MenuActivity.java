@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 public class MenuActivity extends AppCompatActivity {
 
+    public final static String EXTRA_EXERCISE = "es.tta.ejemplo_xiomara_exercise";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,7 @@ public class MenuActivity extends AppCompatActivity {
 
     public void nuevoejercicio(View view){
         Intent intent=new Intent(this, ExerciseActivity.class);
+       // intent.putExtra(EXTRA_EXERCISE,"nuevo ejercicio");
         startActivity(intent);
 
     }
