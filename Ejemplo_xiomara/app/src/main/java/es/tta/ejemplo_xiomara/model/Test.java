@@ -6,22 +6,16 @@ import java.util.ArrayList;
  * Created by Usuario on 18/12/2015.
  */
 public class Test {
-    static public final short ADVISE_HTML = 0;
-    static public final short ADVISE_VIDEO = 1;
-    static public final short ADVISE_AUDIO = 2;
-
     private String wording;
     private ArrayList choices= new ArrayList<Choice>();
 
+    //para el tipo de consejo y asi dirigirnos a un metodo o a otro
+    static public final String HTML_CONSEJO = "text/html";
+    static public final String VIDEO_CONSEJO = "audio/mpeg";
+    static public final String AUDIO_CONSEJO = "video/mp4";
+
     public Test(){
-    }
 
-    public String getWording(){
-        return wording;
-    }
-    public void setWording(String wording){
-
-        this.wording=wording;
     }
 
     public ArrayList<Choice> getChoices(){
@@ -33,26 +27,36 @@ public class Test {
         return (Choice) choices.get(i);
     }
 
-
-
     public void setChoices(ArrayList choices) {
         this.choices = choices;
     }
+    public String getWording(){
 
+        return wording;
+    }
+    public void setWording(String wording){
 
+        this.wording=wording;
+    }
 
+    public static class Choice{
 
-    public class Choice{
-        //contenido del fichero json del test
         private int id;
         private String advise;
         private String answer;
         private boolean correct;
-        private String resourceType;
-
+        private String mime;
 
 
         public Choice(){}
+        public String getMime() {
+            return mime;
+        }
+
+        public void setMime(String mime) {
+            this.mime = mime;
+        }
+
 
         public int getId() {
             return id;
@@ -60,13 +64,6 @@ public class Test {
 
         public void setId(int id) {
             this.id = id;
-        }
-        public String getResourceType() {
-            return resourceType;
-        }
-
-        public void setResourceType(String ResourceType) {
-            this.resourceType = resourceType;
         }
 
         public String getAdvise() {
@@ -95,6 +92,8 @@ public class Test {
 
 
     }
+
+
 
 
 }

@@ -12,8 +12,12 @@ public class Status {
     private String lessonTitle;
     private int nextTest;
     private int nextExercise;
+    final  private String dni;
+    final  private String password;
 
-    public Status(int id, String user, int lessonNumber, String lessonTitle, int nextTest, int nextExercise){
+    public Status(String d, String p,int id, String user, int lessonNumber, String lessonTitle, int nextTest, int nextExercise){
+        dni=d;
+        password=p;
         this.id = id;
         this.user = user;
         this.lessonNumber = lessonNumber;
