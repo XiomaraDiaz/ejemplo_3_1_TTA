@@ -2,6 +2,8 @@ package es.tta.ejemplo_xiomara;
 
 import org.junit.Test;
 
+import es.tta.ejemplo_xiomara.model.Test;
+
 import static org.junit.Assert.*;
 
 /**

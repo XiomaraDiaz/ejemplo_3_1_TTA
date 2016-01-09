@@ -1,6 +1,8 @@
 package es.tta.ejemplo_xiomara;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_LOGIN="es.tta.ejemplo_tta.login";
     public final static String EXTRA_PASSWD="es.tta.ejemplo_tta.passwd";
+
+    private NetworkReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);//IntentFilter es el evento que me interesa
+        receiver = new NetworkReceiver ();
+        this.registerReceiver(receiver, filter);
     }
 
 
@@ -62,5 +70,14 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_LOGIN,editLogin.getText().toString());
         intent.putExtra(EXTRA_PASSWD, editPasswd.getText().toString());
         startActivity(intent);
+    }
+
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(receiver!= null){
+            this.unregisterReceiver(receiver);
+        }
     }
 }

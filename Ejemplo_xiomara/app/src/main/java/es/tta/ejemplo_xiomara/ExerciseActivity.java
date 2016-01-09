@@ -31,9 +31,7 @@ public class ExerciseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        Intent intent = getIntent();
         TextView textExercise = (TextView) findViewById(R.id.exercise_wording);
-       // textExercise.setText(intent.getStringExtra(MenuActivity.EXTRA_EXERCISE));
         textExercise.setText("nuevo ejercicio");
 
         View view;
