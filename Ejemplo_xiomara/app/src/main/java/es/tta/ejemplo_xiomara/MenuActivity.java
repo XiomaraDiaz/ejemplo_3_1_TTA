@@ -10,7 +10,16 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MenuActivity extends AppCompatActivity {
+import org.json.JSONException;
+
+import java.io.IOException;
+
+import es.tta.ejemplo_xiomara.model.Exercise;
+import es.tta.ejemplo_xiomara.model.Status;
+import es.tta.ejemplo_xiomara.model.Test;
+import es.tta.ejemplo_xiomara.prof.view.ProgressTask;
+
+public class MenuActivity extends ModelActivity {
 
 
 
@@ -19,32 +28,65 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        Intent intent =getIntent();
+
         TextView textLogin=(TextView)findViewById(R.id.menu_login);
-        textLogin.setText(("Bienvenido: " + intent.getStringExtra(MainActivity.EXTRA_LOGIN)));
+        textLogin.setText(("Bienvenido: " +data.getExtraDni()));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        new Thread(new Runnable() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void run() {
+
+                try {
+                    Status user= server.getStatus(data.getExtraDni(),data.getExtraPassword());//cojo el estado del usuario del servidor
+                    data.putUserId(user.getId());//meto sus valores en data para poder propagarlos, el id
+                    data.putUserName(user.getUser());//el nombre
+                    data.setNextText(user.getNextTest());//el test
+                    data.setNextExercise(user.getNextExercise());//el ejercicio
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
-        });
+        }).start();
     }
 
     public void nuevotest(View view){
-        Intent intent=new Intent(this, TestActivity.class);
-        startActivity(intent);
+        new ProgressTask<Test>(this){
+
+            @Override
+            protected Test work() throws Exception {
+                return server.getTest(data.getNextText());//devuelvo el test que antes he metido en data
+            }
+
+            @Override
+            protected void onFinish(Test result) {
+                data.putTest(result);//relleno el test
+                startModelActivity(TestActivity.class);//le paso el test rellenado a la siguiente actividad
+
+            }
+        }.execute();
 
     }
 
     public void nuevoejercicio(View view){
-        Intent intent=new Intent(this, ExerciseActivity.class);
-        startActivity(intent);
+        new ProgressTask<Exercise>(this){
+            @Override
+            protected Exercise work() throws Exception {
+                return server.getExercise(data.getNextExercise());//cojo el ejercicio del servidor
+            }
+
+            @Override
+            protected void onFinish(Exercise result) {
+                data.putExercise(result);//relleno el ejercicio
+                startModelActivity(ExerciseActivity.class);//para poder propagarlo a la siguiente actividad
+
+            }
+        }.execute();
 
     }
     public void seguimiento(View view){

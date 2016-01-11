@@ -13,9 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
-    public final static String EXTRA_LOGIN="es.tta.ejemplo_tta.login";
-    public final static String EXTRA_PASSWD="es.tta.ejemplo_tta.passwd";
+public class MainActivity extends ModelActivity {
 
     private NetworkReceiver receiver;
 
@@ -23,18 +21,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        EditText textLogin=(EditText)findViewById(R.id.login);
+        textLogin.setText(prefs.loadLogin());
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);//IntentFilter es el evento que me interesa
         receiver = new NetworkReceiver ();
         this.registerReceiver(receiver, filter);
@@ -64,12 +52,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void login (View view){
-        Intent intent=new Intent (this, MenuActivity.class);
         EditText editLogin=(EditText)findViewById(R.id.login);
         EditText editPasswd=(EditText)findViewById(R.id.passwd);
-        intent.putExtra(EXTRA_LOGIN,editLogin.getText().toString());
-        intent.putExtra(EXTRA_PASSWD, editPasswd.getText().toString());
-        startActivity(intent);
+        final String dni = editLogin.getText().toString();
+        final String password = editPasswd.getText().toString();
+
+        if(dni.matches("[0-9]{8}[A-Z]")){
+
+            prefs.saveLogin(dni);
+            data.putDni(dni);
+            data.putPassword(password);
+            startModelActivity(MenuActivity.class);//se propagan los datos a la siguiente actividad, a Menu
+
+
+
+        }
+
+
     }
 
 

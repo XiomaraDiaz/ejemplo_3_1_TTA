@@ -92,26 +92,8 @@ public class Data {
 
     public void putUserName(String name) {
 
-        bundle.getString(EXTRA_NAME,name);
+        bundle.getString(EXTRA_NAME, name);
     }
-
-
-
-
-    public Exercise getExercise(){
-
-        Exercise exercise= new Exercise();
-        exercise.setId(bundle.getInt(EXTRA_EXERCISE_ID));
-        exercise.setWording(bundle.getString(EXTRA_EXERCISE_WORDING));
-        return exercise;
-    }
-    public void putExercise( Exercise exercise){
-
-        bundle.putInt(EXTRA_EXERCISE_ID, exercise.getId());
-        bundle.putString(EXTRA_EXERCISE_WORDING, exercise.getWording());
-
-    }
-
 
 
     public Test getTest(){
@@ -138,6 +120,20 @@ public class Data {
             return null;
         }
 
+
+    }
+
+    public Exercise getExercise(){
+
+        Exercise exercise= new Exercise();
+        exercise.setId(bundle.getInt(EXTRA_EXERCISE_ID));
+        exercise.setWording(bundle.getString(EXTRA_EXERCISE_WORDING));
+        return exercise;
+    }
+    public void putExercise( Exercise exercise){
+
+        bundle.putInt(EXTRA_EXERCISE_ID, exercise.getId());
+        bundle.putString(EXTRA_EXERCISE_WORDING, exercise.getWording());
 
     }
     public void putTest(Test test)  {
