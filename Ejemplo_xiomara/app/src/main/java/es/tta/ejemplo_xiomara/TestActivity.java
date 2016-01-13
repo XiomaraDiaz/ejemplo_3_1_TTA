@@ -23,10 +23,12 @@ import es.tta.ejemplo_xiomara.model.Test;
 import es.tta.ejemplo_xiomara.presentation.Data;
 import es.tta.ejemplo_xiomara.prof.view.AudioPlayer;
 
-public class TestActivity extends AppCompatActivity implements View.OnClickListener{
+public class TestActivity extends ModelActivity implements View.OnClickListener{
     private int correcto;
     private String consejo;
-    private short adviseType;
+   // private short adviseType;
+    private String mime;
+    private Test test;
     private LinearLayout layout;
 
     @Override
@@ -35,8 +37,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_test);
 
         //obtener el test
-        Data data = new Data();
-        Test test = data.getTest();
+        test = data.getTest();
 
         TextView textWording = (TextView) findViewById(R.id.test_wording);
         textWording.setText(test.getWording());
@@ -44,7 +45,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         int i = 0;
         for(Test.Choice choice : test.getChoices()){
             RadioButton radio = new RadioButton(this);
-            radio.setText(choice.getWording());//rellenar el enunciado de la opcion
+            radio.setText(choice.getAnswer());//rellenar el enunciado de la opcion
             radio.setOnClickListener(this);//escuchar a que clicke
             group.addView(radio);
             if(choice.isCorrect()){
@@ -53,8 +54,6 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             i++;
         }
 
-        consejo=test.getAdvice();
-        adviseType = test.getAdviseType();
         layout = (LinearLayout) findViewById(R.id.test_linear);
     }
 
@@ -80,6 +79,9 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
         if(selected != correcto){
             group.getChildAt(selected).setBackgroundColor(Color.RED);
             Toast.makeText(getApplicationContext(), "¡Has fallado!", Toast.LENGTH_SHORT).show();
+            Test.Choice choice= test.getChoice(selected);
+            consejo = choice.getAdvise();
+            mime= choice.getMime();
             if(consejo != null && !consejo.isEmpty()){
                 findViewById(R.id.button_view_advise).setVisibility(View.VISIBLE);
             }
@@ -89,14 +91,14 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
 
     public void help(View view) throws IOException {
         view.setEnabled(false);
-        switch(adviseType){
-            case Test.ADVISE_AUDIO:
+        switch(mime){
+            case Test.AUDIO_CONSEJO:
                 showAudio();
                 break;
-            case Test.ADVISE_HTML:
+            case Test.HTML_CONSEJO:
                 showHtml();
                 break;
-            case Test.ADVISE_VIDEO:
+            case Test.VIDEO_CONSEJO:
                 showVideo();
                 break;
         }

@@ -18,7 +18,9 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-public class ExerciseActivity extends AppCompatActivity {
+import es.tta.ejemplo_xiomara.model.Exercise;
+
+public class ExerciseActivity extends ModelActivity {
 
     private Uri pictureURI;
     final private int READ_REQUEST_CODE=0;
@@ -30,21 +32,10 @@ public class ExerciseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-
+        Exercise exercise= data.getExercise();
         TextView textExercise = (TextView) findViewById(R.id.exercise_wording);
-        textExercise.setText("nuevo ejercicio");
+        textExercise.setText(exercise.getWording());
 
-        View view;
-        if(!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-            view = findViewById(R.id.sacarfoto);
-            view.setEnabled(false);
-            view = findViewById(R.id.grabarvideo);
-            view.setEnabled(false);
-        }
-        if(!getPackageManager().hasSystemFeature(PackageManager.FEATURE_MICROPHONE)){
-            view = findViewById(R.id.grabaraudio);
-            view.setEnabled(false);
-        }
 
     }
 
