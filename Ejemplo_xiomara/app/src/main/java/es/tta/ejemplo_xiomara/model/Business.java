@@ -1,10 +1,14 @@
 package es.tta.ejemplo_xiomara.model;
 
+import android.net.Uri;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import es.tta.ejemplo_xiomara.prof.comms.RestClient;
@@ -26,6 +30,14 @@ public class Business {
         exercise.setWording(json.getString("wording"));
         return exercise;
 
+    }
+
+
+
+    public int postExercise(Uri uri, int user, int exercise,String name)throws IOException{
+        InputStream is = new FileInputStream(uri.getPath());
+        String path = "postExercise?user="+user+"&id="+exercise;
+        return rest.postFile(path,is,name);
     }
 
     //nos devuelve el estado: id,user,lesson,lessontitle,nexttest,nextexercise
@@ -56,7 +68,13 @@ public class Business {
                 choice.setAnswer(item.getString("answer"));
                 choice.setCorrect(item.getBoolean("correct"));
                 choice.setAdvise(item.optString("advise", null));
-                choice.setMime(item.optString("mime", null));
+
+                if (item.isNull("resourceType")){
+                    choice.setMime(null);
+                }else
+                {
+                    choice.setMime(item.getJSONObject("resourceType").getString("mime"));
+                }
                 test.getChoices().add(choice);
             }
             return test;
@@ -64,5 +82,12 @@ public class Business {
         }catch (JSONException e){
             return null;
         }
+    }
+
+    public int postTest(int user, int choice)throws IOException, JSONException{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId",user);
+        jsonObject.put("choiceId",choice);
+        return rest.postJson(jsonObject,"Choice");
     }
 }

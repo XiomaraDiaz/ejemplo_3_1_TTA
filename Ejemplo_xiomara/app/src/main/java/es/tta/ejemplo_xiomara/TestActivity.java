@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,11 +63,11 @@ public class TestActivity extends ModelActivity implements View.OnClickListener{
         findViewById(R.id.button_send).setVisibility(View.VISIBLE);
     }
 
-    public void send (View view){
+    public void send (final View view){
         RadioGroup group = (RadioGroup) findViewById(R.id.test_choices);
         int selectedID = group.getCheckedRadioButtonId();
         View radioButton = group.findViewById(selectedID);
-        int selected = group.indexOfChild(radioButton);
+       final int selected = group.indexOfChild(radioButton);
 
         int choices = group.getChildCount();
         for (int i=0; i < choices; i++){
@@ -87,6 +88,24 @@ public class TestActivity extends ModelActivity implements View.OnClickListener{
             }
         } else
             Toast.makeText(getApplicationContext(),"¡Correcto!",Toast.LENGTH_SHORT).show();
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    server.postTest(data.getUserId(),selected);
+                }catch(Exception e){
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "NO SE SUBE EL FICHERO", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.e("", e.getMessage(), e);
+                }
+            }
+        }).start();
     }
 
     public void help(View view) throws IOException {
